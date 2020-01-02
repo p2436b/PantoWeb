@@ -2,38 +2,32 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const AppError = require('../utils/appError');
+const asyncCatch = require('../utils/catchAsync');
 const userModel = require('../models/userModel');
 
-exports.signup = async (req, res, next) => {
-  try {
-    const newUser = await userModel.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      mobile: req.body.mobile,
-      email: req.body.email,
-      password: req.body.password
-    });
+exports.signup = asyncCatch(async (req, res, next) => {
+  const newUser = await userModel.create({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    mobile: req.body.mobile,
+    email: req.body.email,
+    password: req.body.password
+  });
 
-    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN
-    });
+  const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+  });
 
-    res.status(201).json({
-      status: 'success',
-      token,
-      data: {
-        user: newUser
-      }
-    });
-  } catch (e) {
-    res.status(400).json({
-      status: 'fail',
-      message: e
-    });
-  }
-};
+  res.status(201).json({
+    status: 'success',
+    token,
+    data: {
+      user: newUser
+    }
+  });
+});
 
-exports.login = async (req, res, next) => {
+exports.login = asyncCatch(async (req, res, next) => {
   const { email, password } = req.body;
 
   // 1) Check if email and password exist
@@ -60,7 +54,7 @@ exports.login = async (req, res, next) => {
     status: 'success',
     token
   });
-};
+});
 
 exports.protect = async (req, res, next) => {
   // 1) Getting token and check of it's there
