@@ -21,14 +21,24 @@ const User = connection.define(
         isEmail: true
       }
     },
+    role: {
+      type: Sequelize.STRING,
+      defaultValue: 'user'
+    },
     password: {
       type: Sequelize.STRING,
       required: true
-    }
+    },
+    passwordChangedAt: Sequelize.DATE,
+    passwordResetToken: Sequelize.STRING,
+    passwordResetExpires: Sequelize.DATE
   },
   {
     hooks: {
       beforeCreate: async user => {
+        user.password = await bcrypt.hash(user.password, 12);
+      },
+      beforeUpdate: async user => {
         user.password = await bcrypt.hash(user.password, 12);
       }
     }

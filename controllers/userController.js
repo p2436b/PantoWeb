@@ -1,6 +1,17 @@
+const catchAsync = require('../utils/catchAsync');
 const userModel = require('../models/userModel');
 
-exports.getAllUsers = async (req, res, next) => {};
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+  const users = await userModel.findAll({
+    attributes: { exclude: ['password'] }
+  });
+  res.status(200).json({
+    status: 'success',
+    data: {
+      users
+    }
+  });
+});
 
 exports.getUser = async (req, res, next) => {};
 

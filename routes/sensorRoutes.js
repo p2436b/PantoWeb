@@ -5,11 +5,15 @@ const authController = require('../controllers/authController');
 const Router = express.Router();
 
 Router.route('/')
-  .get(authController.protect,sensorController.getData)
+  .get(
+    authController.protect,
+    authController.restrictTo('admin', 'maintainer'),
+    sensorController.getData
+  )
   .post(sensorController.postData);
 
 Router.route('/:id')
-  .get(authController.protect, sensorController.getData)
+  .get(sensorController.getData)
   .put(sensorController.getData)
   .delete(sensorController.getData);
 

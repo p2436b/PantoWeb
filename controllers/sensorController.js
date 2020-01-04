@@ -1,9 +1,9 @@
-const asyncCatch = require('../utils/catchAsync');
+const catchAsync = require('../utils/catchAsync');
 const cameraModel = require('../models/cameraModel');
 const accelerometerModel = require('../models/accelerometerModel');
 const gpsTemptureModel = require('../models/gpsTemptureModel');
 
-exports.postData = asyncCatch(async (req, res, next) => {
+exports.postData = catchAsync(async (req, res, next) => {
   const { accelerometer, camera, gpsTempture } = req.body;
 
   if (camera) {
@@ -22,7 +22,7 @@ exports.postData = asyncCatch(async (req, res, next) => {
   });
 });
 
-exports.getData = asyncCatch(async (req, res, next) => {
+exports.getData = catchAsync(async (req, res, next) => {
   const sensorType = req.query.type;
 
   let data = undefined;
