@@ -7,14 +7,26 @@ const Router = express.Router();
 Router.route('/')
   .get(
     authController.protect,
-    authController.restrictTo('admin', 'maintainer'),
+    authController.restrictTo('admin'),
     sensorController.getData
   )
-  .post(sensorController.postData);
+  .post(authController.protectApi, sensorController.postData);
 
 Router.route('/:id')
-  .get(sensorController.getData)
-  .put(sensorController.getData)
-  .delete(sensorController.getData);
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    sensorController.getData
+  )
+  .put(
+    authController.protect,
+    authController.restrictTo('admin'),
+    sensorController.getData
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin'),
+    sensorController.getData
+  );
 
 module.exports = Router;

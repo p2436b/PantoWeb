@@ -16,7 +16,8 @@ const User = connection.define(
     mobile: Sequelize.STRING(15),
     email: {
       type: Sequelize.STRING(50),
-      required: true,
+      allowNull: false,
+      unique: true,
       validate: {
         isEmail: true
       }
@@ -27,7 +28,7 @@ const User = connection.define(
     },
     password: {
       type: Sequelize.STRING,
-      required: true
+      allowNull: false
     },
     passwordChangedAt: Sequelize.DATE,
     passwordResetToken: Sequelize.STRING,

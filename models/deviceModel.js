@@ -1,16 +1,26 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 
-const connection = require("../database/connection");
+const connection = require('../database/connection');
 
-const Device = connection.define("Device", {
+const Device = connection.define('Device', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  model: Sequelize.STRING(50),
+  model: {
+    type: Sequelize.STRING(50),
+    allowNull: false
+  },
   doc: Sequelize.DATE,
-  status: Sequelize.INTEGER
+  apiKey: {
+    type: Sequelize.STRING,
+    unique: true
+  },
+  status: {
+    type: Sequelize.INTEGER,
+    defaultValue: 10001
+  }
 });
 
 module.exports = Device;

@@ -7,6 +7,7 @@ const { Op } = require('sequelize');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const userModel = require('../models/userModel');
+const deviceModel = require('../models/deviceModel');
 const sendEmail = require('../utils/email');
 
 const signToken = id => {
@@ -236,3 +237,24 @@ exports.updatePassword = async (req, res, next) => {
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);
 };
+
+exports.protectApi = catchAsync(async (req, res, next) => {
+  if (!req.headers['x-panto-api-key'])
+    return next(
+      new AppError('You do not have permission to perform this action', 401)
+    );
+
+  const apiKey = req.headers['x-panto-api-key'];
+  const device = await deviceModel.findOne({
+    where: {
+      apiKey
+    }
+  });
+
+  if (!device)
+    return next(
+      new AppError('You do not have permission to perform this action', 401)
+    );
+
+  next();
+});
