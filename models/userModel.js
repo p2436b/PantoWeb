@@ -32,7 +32,11 @@ const User = connection.define(
     },
     passwordChangedAt: Sequelize.DATE,
     passwordResetToken: Sequelize.STRING,
-    passwordResetExpires: Sequelize.DATE
+    passwordResetExpires: Sequelize.DATE,
+    status: {
+      type: Sequelize.INTEGER,
+      defaultValue: 10001
+    }
   },
   {
     hooks: {

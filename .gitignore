@@ -1,2 +1,3 @@
 node_modules/
-sample/
+config.env
+.prettierrc
